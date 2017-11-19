@@ -23,7 +23,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sessions',
     'rest_framework',
-    'rest_framework_rules',
     'rules',
     'testapp',
 ]

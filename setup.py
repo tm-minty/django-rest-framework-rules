@@ -17,39 +17,26 @@ with open(join(dirname(__file__), 'README.rst')) as f:
     long_description = f.read()
 
 
+github_url = 'https://github.com/escodebar/django-rest-framework-rules'
+
 setup(
-    name='rest_framework_rules',
-    description='Django REST framework integration for rules',
+    name='django-rest-framework-rules',
+    description='Django REST framework integration for django-rules',
     version=get_version(VERSION),
     long_description=long_description,
-
-    url='https://github.com/escodebar/django-rest-framework-rules',
-    download_url='https://github.com/escodebar/django-rest-framework-rules/archive/v0.1.tar.gz',
+    url=github_url,
+    download_url=('{github_url}/archive/v{version}.tar.gz'
+                  .format(github_url=github_url,
+                          version=get_version(VERSION))),
     author='Pablo Escodebar',
     author_email='escodebar@gmail.com',
     maintainer='Pablo Escodebar',
     maintainer_email='escodebar@gmail.com',
     license='MIT',
-
-    packages=[
-        'rest_framework_rules',
-    ],
-
-    install_requires=[
-        'Django>=1.9',
-        'djangorestframework>=3.6',
-        'rules>=1.2.1',
-        'six',
-    ],
-    extras_require={
-        'test': [
-            'nose',
-            'coverage',
-            'Django>=1.5',
-            'djangorestframework',
-        ]
-    },
-
+    packages=['rest_framework_rules'],
+    install_requires=['Django>=1.9'],
+    python_requires='>=2.7, >=3.5.*, <4',
+    py_modules=['six'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Web Environment',
