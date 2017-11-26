@@ -44,7 +44,7 @@ Using pip:
 
 .. code:: bash
 
-    $ pip install "git+http://github.com/escodebar/django-rest-framework-rules.git@v0.1.1"
+    $ pip install django-rest-framework-rules
 
 Using rest_framework_rules
 ==========================
