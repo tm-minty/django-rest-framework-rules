@@ -26,6 +26,11 @@ Requirements
 
 This package was made to be used with ``Django``, ``django-rules`` and the ``django-rest-framework``.
 
+Build status
+============
+
+.. image:: https://travis-ci.org/escodebar/django-rest-framework-rules.svg?branch=master
+
 Run tests
 =========
 
