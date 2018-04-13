@@ -3,7 +3,7 @@ from __future__ import absolute_import
 import rules
 from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
-from django.core.urlresolvers import reverse
+from django.shortcuts import reverse
 from django.utils.encoding import force_str
 from rest_framework.test import APITestCase
 from testapp.models import Book
