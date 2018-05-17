@@ -11,3 +11,10 @@ docs/_build
 pip-log.txt
 .tox
 .eggs/
+bin/
+build/
+include/
+lib/
+man/
+pip-selfcheck.json
+pyvenv.cfg
