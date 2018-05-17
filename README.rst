@@ -328,6 +328,9 @@ Let's add some custom routes to the ``BoulderViewSet`` defined in climb-app! to 
 Changelog
 =========
 
+``v1.0.0`` - 2018/05/15
+    - Dropped python 2.7 support.
+
 ``v0.1.1`` - 2017/11/17
     - Improve README and package setup.
 
