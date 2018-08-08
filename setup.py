@@ -35,7 +35,7 @@ setup(
     license='MIT',
     packages=['rest_framework_rules'],
     install_requires=['Django>=1.9'],
-    python_requires='>=2.7, >=3.5.*, <4',
+    python_requires='>=2.7, <4',
     py_modules=['six'],
     classifiers=[
         'Development Status :: 3 - Alpha',
