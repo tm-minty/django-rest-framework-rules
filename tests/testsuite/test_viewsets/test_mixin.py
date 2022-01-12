@@ -8,9 +8,12 @@ from testapp import viewsets
 
 
 class PermissionRequiredMixedViewSetTests(APITestCase):
-
-    """Tests the behavior of the mixin when used on an ViewSet
     """
+    Tests the behavior of the mixin when used on an ViewSet
+    """
+
+    fixtures = ['fixture.json']
+
     def test_user_with_permission_gets_access(self):
         user = User.objects.get(username='anton')
         permissions = viewsets.SinglePermissionViewSet().get_permission_required()
@@ -58,13 +61,15 @@ class PermissionRequiredMixedViewSetTests(APITestCase):
 
     def test_improperly_configured_viewset_raises(self):
         with self.assertRaises(ImproperlyConfigured):
-            response = self.client.get(reverse('improperly_configured_viewset-detail', args=(1,)))
+            self.client.get(reverse('improperly_configured_viewset-detail', args=(1,)))
 
 
 class PermissionRequiredMixedGenericViewSetTests(APITestCase):
-
-    """Tests the behavior of the mixin when used on a GeneriViewSet
     """
+    Tests the behavior of the mixin when used on a GeneriViewSet
+    """
+
+    fixtures = ['fixture.json']
 
     def test_object_permission_falls_back_to_required_permissions(self):
         viewset = viewsets.GenericViewSetWithoutObjectPermissions()

@@ -8,23 +8,21 @@ class PermissionRequiredMixin:
 
     def get_permission_required(self):
 
-        if self.permission_required is None:
+        if self.permission_required is None and self.object_permission_required is None:
             # This prevents a misconfiguration of the view into which the mixin
             # is mixed. If the mixin is used, at least one permission should be
             # required.
             raise ImproperlyConfigured(
-                '{0} is missing the permission_required attribute. Define '
+                '{0} is missing a permission_required or '
+                'object_permission_required attribute. Define '
                 '{0}.permission_required, or override '
                 '{0}.get_permission_required().'
                 .format(self.__class__.__name__)
             )
 
-        if isinstance(self.permission_required, str):
-            perms = (self.permission_required, )
-        else:
-            perms = self.permission_required
+        perm = self.permission_required or self.object_permission_required
 
-        return perms
+        return (perm, ) if isinstance(perm, str) else perm
 
     def get_object_permission_required(self):
 

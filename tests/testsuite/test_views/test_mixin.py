@@ -1,18 +1,18 @@
 from __future__ import absolute_import
 
-import rules
 from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
 from django.shortcuts import reverse
 from rest_framework.test import APITestCase
-from testapp.models import Book
 from testapp import views
 
 
 class PermissionRequiredMixedAPIViewTests(APITestCase):
-
-    """Tests the behavior of the mixin when used on an APIView
     """
+    Tests the behavior of the mixin when used on an APIView
+    """
+
+    fixtures = ['fixture.json']
 
     def test_user_with_permission_gets_access(self):
         user = User.objects.get(username='anton')
@@ -61,13 +61,15 @@ class PermissionRequiredMixedAPIViewTests(APITestCase):
 
     def test_improperly_configured_api_view_raises(self):
         with self.assertRaises(ImproperlyConfigured):
-            response = self.client.get(reverse('improperly_configured_api_view'))
+            self.client.get(reverse('improperly_configured_api_view'))
 
 
 class PermissionRequiredMixedGenericAPIViewTests(APITestCase):
-
-    """Tests the behavior of the mixin when used on a GenericAPIView
     """
+    Tests the behavior of the mixin when used on a GenericAPIView
+    """
+
+    fixtures = ['fixture.json']
 
     def test_object_permission_falls_back_to_required_permissions(self):
         view = views.GenericViewWithoutObjectPermissions()
