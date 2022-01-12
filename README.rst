@@ -16,7 +16,7 @@ Table of Contents
   - `PermissionRequiredMixin with the APIView and GenericAPIView`_
   - `PermissionRequiredMixin with the ViewSet and GenericViewSet`_
   - `permission_required decorator with APIView and ViewSet methods`_
-  - `using list_route and detail_route decorator with the PermissionRequiredMixin`_
+  - `using action decorator with the PermissionRequiredMixin`_
 
 - `Changelog`_
 - `Licence`_
@@ -91,7 +91,7 @@ Let's define some predicates and the beforementioned permissions (this code usua
 
     from climb_app.models import Climber, RouteSetter
     import rules
-    
+
     @rules.predicate
     def is_a_climber(user):
         return Climber.objects.filter(user=user).exists()
@@ -204,8 +204,10 @@ In the context of climb-app! this could be used with the views for retrieving an
 PermissionRequiredMixin with the ViewSet and GenericViewSet
 -----------------------------------------------------------
 
-The ``PermissionRequiredMixin`` can be used as well with ``ViewSet`` and ``GenericViewSet``.
-The user need to have the ``permission_required`` to call actions of a viewset and ``object_permission_required`` (which defaults to ``permission_required`` if not set) to call ``get_object``.
+The ``PermissionRequiredMixin`` can be used as well with ``ViewSet`` and
+``GenericViewSet``. The user needs to have either ``permission_required`` or
+``object_permission_required`` to call actions within a viewset to call
+``get_object``.
 
 Let's use this in climb app! to allow routesetters to create, delete boulders and list the reviews of their boulders.
 
@@ -282,17 +284,20 @@ The arguments passed to the context object callable are the same as the ones of 
             return Response(status=204)
 
 
-using list_route and detail_route decorator with the PermissionRequiredMixin
-----------------------------------------------------------------------------
+using action decorator with the PermissionRequiredMixin
+-------------------------------------------------------
 
-``rest_framework`` provides the decorators ``list_route`` and ``detail_route`` to define custom routes in viewsets.
-These can be used as well with ``django-rest-framework-rules`` under the condition, that the ``ViewSet`` is mixed with the ``PermissionRequiredMixin``.
+``rest_framework`` provides the decorator ``action`` to define custom routes in
+viewsets.  This can be used as well with ``django-rest-framework-rules`` under
+the condition, that the ``ViewSet`` is mixed with the ``PermissionRequiredMixin``.
 
-Let's add some custom routes to the ``BoulderViewSet`` defined in climb-app! to allow routesetter to retrieve all reviews of a boulder and list all climbers which have solved the routesetter's boulders.
+Let's add some custom routes to the ``BoulderViewSet`` defined in climb-app! to
+allow routesetter to retrieve all reviews of a boulder and list all climbers
+which have solved the routesetter's boulders.
 
 .. code:: python
 
-    from rest_framework.decorators import list_route, detail_route
+    from rest_framework.decorators import action
     from rest_framework.response import Response
     from rest_framework.viewsets import ViewSet
     from rest_framework_rules.mixins import PermissionRequiredMixin
@@ -310,7 +315,7 @@ Let's add some custom routes to the ``BoulderViewSet`` defined in climb-app! to 
             instance.delete()
             return Response(status=204)
 
-        @detail_route(methods=['get'], permission_required='climb_app.retrieve_reviews')
+        @action(detail=True, methods=['get'], permission_required='climb_app.retrieve_reviews')
         def reviews(self, request, pk):
             boulder = self.get_object()
             queryset = (Review.objects
@@ -319,7 +324,7 @@ Let's add some custom routes to the ``BoulderViewSet`` defined in climb-app! to 
             serializer = ReviewSerializer(queryset=queryset, many=True)
             return Response(serializer.data)
 
-        @list_route(methods=['get'], permission_required='climb_app.retrieve_climbers')
+        @action(detail=False, methods=['get'], permission_required='climb_app.retrieve_climbers')
         def climbers(self, request):
             queryset = Climber.objects.filter(solution__boulder__author=request.user).distinct()
             serializer = ClimberSerializer(queryset=queryset, many=True)
@@ -327,6 +332,10 @@ Let's add some custom routes to the ``BoulderViewSet`` defined in climb-app! to 
 
 Changelog
 =========
+
+``v1.0.1`` - 2022/01/11
+    - Updated README to support ``django rest framework`` 3.9.4
+    - Added ability for ``object_permission_required`` to be declared on it's own
 
 ``v1.0.0`` - 2018/05/15
     - Dropped python 2.7 support.
@@ -346,7 +355,7 @@ Licence
 
 ``django-rest-framework-rules`` is distributed under the MIT licence.
 
-Copyright (c) 2017 Pablo Escodebar
+Copyright (c) 2022 Pablo Escodebar
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
@@ -371,4 +380,3 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 .. _django-rules documentation: https://github.com/dfunckt/django-rules/blob/7688fdac68e7de6832f28f7b96ebf1f98f32f3c8/README.rst
 .. _django-rules documentation - Using Rules: https://github.com/dfunckt/django-rules/blob/7688fdac68e7de6832f28f7b96ebf1f98f32f3c8/README.rst#using-rules
-

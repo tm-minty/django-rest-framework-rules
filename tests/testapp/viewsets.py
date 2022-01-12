@@ -1,11 +1,10 @@
 from __future__ import absolute_import
 
-from rest_framework.decorators import list_route, detail_route
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ViewSet
 from rest_framework_rules.decorators import permission_required
 from rest_framework_rules.mixins import PermissionRequiredMixin
-from rules.contrib.views import objectgetter
 from .models import Book
 from .serializers import BookSerializer
 
@@ -55,26 +54,53 @@ class DecoratedViewSet(ViewSet):
 
 class DecoratedViewSetWithCustomRoutes(PermissionRequiredMixin, ViewSet):
 
-    @list_route(methods=['get'], permission_required='testapp.access_single_permission_detail_route')
+    @action(
+        detail=False,
+        methods=['get'],
+        permission_required='testapp.access_single_permission_detail_route',
+    )
     def single_permission_list_route(self, request):
         return Response({'the man': 'you'})
 
-    @list_route(methods=['get'], permission_required=('testapp.access_multiple_permissions_detail_route_1',
-                                                      'testapp.access_multiple_permissions_detail_route_2'))
+    @action(
+        detail=False,
+        methods=['get'],
+        permission_required=(
+            'testapp.access_multiple_permissions_detail_route_1',
+            'testapp.access_multiple_permissions_detail_route_2',
+        ),
+    )
     def multiple_permissions_list_route(self, request):
         return Response({'the man': 'you'})
 
-    @detail_route(methods=['post'],
-                  permission_required='testapp.access_single_permission_detail_route',
-                  object_permission_required='testapp.access_single_permission_object')
+    @action(
+        detail=True,
+        methods=['post'],
+        permission_required='testapp.access_single_permission_detail_route',
+        object_permission_required='testapp.access_single_permission_object',
+    )
     def single_permission_detail_route(self, request, pk=None):
         return Response({'the man': 'you'})
 
-    @detail_route(methods=['post'],
-                  permission_required='testapp.access_single_permission_detail_route',
-                  object_permission_required=('testapp.access_multiple_permissions_object_1',
-                                              'testapp.access_multiple_permissions_object_2'))
+    @action(
+        detail=True,
+        methods=['post'],
+        permission_required='testapp.access_single_permission_detail_route',
+        object_permission_required=(
+            'testapp.access_multiple_permissions_object_1',
+            'testapp.access_multiple_permissions_object_2'),
+    )
     def multiple_permissions_detail_route(self, request, pk=None):
+        return Response({'the man': 'you'})
+
+
+class DecoratedViewSetOneObjectPermission(PermissionRequiredMixin, ViewSet):
+    @action(
+        detail=True,
+        methods=['get'],
+        object_permission_required='testapp.access_single_object',
+    )
+    def main(self, request, pk=None):
         return Response({'the man': 'you'})
 
 
